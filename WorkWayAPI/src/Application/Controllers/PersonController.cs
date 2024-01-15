@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using DTOs;
+using AutoMapper;
 
 namespace Controllers;
 
@@ -10,15 +12,18 @@ public class PersonController : ControllerBase
 {
 
     private WorkWayContext _context;
+    private IMapper _mapper;
 
-    public PersonController(WorkWayContext context)
+    public PersonController(WorkWayContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     [HttpPost]
-    public IActionResult? AddPerson([FromBody] Person person)
+    public IActionResult? AddPerson([FromBody] PersonCreateDTO personDto)
     {
+        Person person = _mapper.Map<Person>(personDto);
         _context.People.Add(person);
         _context.SaveChanges();
         return CreatedAtAction(

@@ -1,13 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Namespace;
-public class PersonDTO
+namespace DTOs;
+public class PersonCreateDTO
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-
     [Required(ErrorMessage = "O nome é obrigatorio")]
     public required string Name { get; set; }
 }

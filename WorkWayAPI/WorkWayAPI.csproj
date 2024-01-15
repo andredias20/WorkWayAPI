@@ -24,5 +24,6 @@
 
   <ItemGroup>
     <Folder Include="Infraestruture/" />
+    <Folder Include="src/Domain/Person/DTOs/" />
   </ItemGroup>
 </Project>
