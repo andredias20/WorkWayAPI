@@ -35,9 +35,9 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet()]
-    public IEnumerable<Person> ListPerson([FromQuery()] int page = 0, [FromQuery] int size = 50)
+    public IEnumerable<PersonReadDTO> ListPerson([FromQuery()] int page = 0, [FromQuery] int size = 50)
     {
-        return _context.People.Skip(page).Take(size);
+        return _mapper.Map<List<PersonReadDTO>>(_context.People.Skip(page).Take(size));
     }
 
     [HttpGet("{id}")]
@@ -45,7 +45,9 @@ public class PersonController : ControllerBase
     {
         var person = _context.People.FirstOrDefault(person => person.Id == id);
         if (person == null) return NotFound();
-        return Ok(person);
+        var personDto = _mapper.Map<PersonReadDTO>(person);
+
+        return Ok(personDto);
     }
 
     [HttpPut("{id}")]
