@@ -77,4 +77,16 @@ public class PersonController : ControllerBase
         return NoContent();
     }
 
+    [HttpDelete("{id}")]
+    public IActionResult? DeletePerson(int id)
+    {
+        var person = _context.People.FirstOrDefault(person => person.Id == id);
+        
+        if(person == null) return NotFound();
+
+        _context.People.Remove(person);
+        _context.SaveChanges();
+        return NoContent();
+    }
+
 }
