@@ -8,5 +8,6 @@ public class WorkWayProfile : Profile
     public WorkWayProfile()
     {
         CreateMap<PersonCreateDTO, Person>();
+        CreateMap<PersonUpdateDTO, Person>();
     }
 }

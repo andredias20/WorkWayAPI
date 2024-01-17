@@ -5,10 +5,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<WorkWayContext>(opts => 
     opts.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
+
 builder.Services
     .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

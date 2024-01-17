@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using DTOs;
 using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Controllers;
 
@@ -46,4 +47,34 @@ public class PersonController : ControllerBase
         if (person == null) return NotFound();
         return Ok(person);
     }
+
+    [HttpPut("{id}")]
+    public IActionResult? UpdatePerson(int id, [FromBody] PersonUpdateDTO personUpdateDTO)
+    {
+        var person = _context.People.FirstOrDefault(person => person.Id == id);
+        if(person == null) return NotFound();
+
+        _mapper.Map(personUpdateDTO, person);
+        _context.SaveChanges();
+        return NoContent();
+    }
+
+    [HttpPatch("{id}")]
+    public IActionResult? PathName(int id, JsonPatchDocument<PersonUpdateDTO> path)
+    {
+        var person = _context.People.FirstOrDefault(person => person.Id == id);
+        if(person == null) return NotFound();
+        var personToUpdate = _mapper.Map<PersonUpdateDTO>(person);
+        path.ApplyTo(personToUpdate, ModelState);
+
+        if(!TryValidateModel(personToUpdate))
+        {
+            return ValidationProblem(ModelState);
+        }
+
+        _mapper.Map(personToUpdate, person);
+        _context.SaveChanges();
+        return NoContent();
+    }
+
 }
