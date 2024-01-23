@@ -14,9 +14,9 @@ namespace Infraestruture.Repositories.Persons
     {
         public List<PersonReadDTO>? GetAll(int page, int size);
         Person? GetPersonById(int id);
-        PersonReadDTO? GetPersonReadDTOById(int id);
-        Person? CreatePerson(PersonCreateDTO personCreateDTO);
-        Person? UpdatePerson(int id, PersonUpdateDTO personUpdateDTO);
+        PersonReadDTO? GetPersonReadDtoById(int id);
+        Person? CreatePerson(PersonCreateDTO personCreateDto);
+        Person? UpdatePerson(int id, PersonUpdateDTO personUpdateDto);
         Person? DeletePerson(int id);
     }
 }

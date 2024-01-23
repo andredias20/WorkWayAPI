@@ -33,7 +33,7 @@ namespace Infraestruture.Repositories.Persons
             return _context.People.FirstOrDefault(person => person.Id == id);
         }
 
-        public PersonReadDTO? GetPersonReadDTOById(int id)
+        public PersonReadDTO? GetPersonReadDtoById(int id)
         {
             var person = GetPersonById(id);
             return _mapper.Map<PersonReadDTO>(person);
