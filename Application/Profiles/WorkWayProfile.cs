@@ -1,0 +1,15 @@
+using AutoMapper;
+using Models;
+using DTOs;
+
+namespace Profiles;
+public class WorkWayProfile : Profile
+{
+    public WorkWayProfile()
+    {
+        CreateMap<PersonCreateDTO, Person>();
+        CreateMap<PersonUpdateDTO, Person>();
+        CreateMap<Person, PersonUpdateDTO>();
+        CreateMap<Person, PersonReadDTO>();
+    }
+}
