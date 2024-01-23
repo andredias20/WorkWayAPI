@@ -1,3 +1,5 @@
+using System.Net;
+using Infraestruture.Repositories.Persons;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,8 @@ builder.Services.AddDbContext<WorkWayContext>(opts =>
 
 builder.Services
     .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+//builder.Services.AddSingleton<IPersonRepository, PersonRepository>();
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
@@ -23,7 +27,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();

@@ -1,10 +1,15 @@
 ﻿using AutoMapper;
 using DTOs;
 using Infraestruture.Repositories;
-using Models;
 using System.Drawing;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using Models;
 
-namespace Infraestruture.Repositories
+namespace Infraestruture.Repositories.Persons
 {
     public class PersonRepository : IPersonRepository
     {
@@ -28,7 +33,7 @@ namespace Infraestruture.Repositories
             return _context.People.FirstOrDefault(person => person.Id == id);
         }
 
-        public PersonReadDTO? GetPersonReadDTOById(int id)
+        public PersonReadDTO? GetPersonReadDtoById(int id)
         {
             var person = GetPersonById(id);
             return _mapper.Map<PersonReadDTO>(person);
@@ -52,7 +57,11 @@ namespace Infraestruture.Repositories
 
         public Person? DeletePerson(int id)
         {
-            
+            var person = GetPersonById(id);
+            if (person == null) return null;
+            _context.People.Remove(person);
+            _context.SaveChanges();
+            return person;
         }
     }
 }

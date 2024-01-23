@@ -6,16 +6,17 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.JsonPatch;
 
-namespace Infraestruture.Repositories
+namespace Infraestruture.Repositories.Persons
 {
     public interface IPersonRepository
     {
         public List<PersonReadDTO>? GetAll(int page, int size);
         Person? GetPersonById(int id);
-        PersonReadDTO? GetPersonReadDTOById(int id);
-        Person? CreatePerson(PersonCreateDTO personCreateDTO);
-        Person? UpdatePerson(PersonUpdateDTO personUpdateDTO);
+        PersonReadDTO? GetPersonReadDtoById(int id);
+        Person? CreatePerson(PersonCreateDTO personCreateDto);
+        Person? UpdatePerson(int id, PersonUpdateDTO personUpdateDto);
         Person? DeletePerson(int id);
     }
 }

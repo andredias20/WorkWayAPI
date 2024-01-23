@@ -1,17 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
-using Models;
 using DTOs;
-using Microsoft.AspNetCore.JsonPatch;
-using Infraestruture.Repositories;
+using Infraestruture.Repositories.Persons;
 
-namespace Controllers;
+namespace Host.Controllers;
 
 [ApiController]
 
 [Route("[controller]")]
 public class PersonController : ControllerBase
 {
-    private PersonRepository _personRepository;
+    private readonly PersonRepository _personRepository;
 
     public PersonController(PersonRepository repository)
     {
@@ -19,24 +17,24 @@ public class PersonController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult? AddPerson([FromBody] PersonCreateDTO personDto)
+    public IActionResult AddPerson([FromBody] PersonCreateDTO personDto)
     { 
         var person = _personRepository.CreatePerson(personDto);
         return CreatedAtAction(
                 nameof(GetPersonById),
-                new { id = person.Id },
+                new { id = person?.Id },
                 person
         );
     }
 
     [HttpGet()]
-    public IEnumerable<PersonReadDTO> ListPerson([FromQuery()] int page = 0, [FromQuery] int size = 50)
+    public IEnumerable<PersonReadDTO>? ListPerson([FromQuery()] int page = 0, [FromQuery] int size = 50)
     { 
         return _personRepository.GetAll(page, size);
     }
 
     [HttpGet("{id}")]
-    public IActionResult? GetPersonById(int id)
+    public IActionResult GetPersonById(int id)
     {
         var person = _personRepository.GetPersonById(id);
         if (person == null) return NotFound();
@@ -44,41 +42,18 @@ public class PersonController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult? UpdatePerson(int id, [FromBody] PersonUpdateDTO personUpdateDTO)
+    public IActionResult UpdatePerson(int id, [FromBody] PersonUpdateDTO personUpdateDto)
     {
-        var person = _personRepository.UpdatePerson(id, personUpdateDTO);
+        var person = _personRepository.UpdatePerson(id, personUpdateDto);
         if (person == null) return NotFound();
         return NoContent();
     }
 
-    [HttpPatch("{id}")]
-    public IActionResult? PathName(int id, JsonPatchDocument<PersonUpdateDTO> path)
-    {
-        var person = _personRepository.GetPersonReadDTOById(id);
-        if(person == null) return NotFound();
-        
-        var personToUpdate = _mapper.Map<PersonUpdateDTO>(person);
-        path.ApplyTo(personToUpdate, ModelState);
-
-        if(!TryValidateModel(personToUpdate))
-        {
-            return ValidationProblem(ModelState);
-        }
-
-        _mapper.Map(personToUpdate, person);
-        _context.SaveChanges();
-        return NoContent();
-    }
-
     [HttpDelete("{id}")]
-    public IActionResult? DeletePerson(int id)
+    public IActionResult DeletePerson(int id)
     {
-        var person = _context.People.FirstOrDefault(person => person.Id == id);
-        
+        var person = _personRepository.DeletePerson(id);
         if(person == null) return NotFound();
-
-        _context.People.Remove(person);
-        _context.SaveChanges();
         return NoContent();
     }
 
