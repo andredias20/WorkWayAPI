@@ -1,6 +1,6 @@
+using Application.Services.Persons;
 using Microsoft.AspNetCore.Mvc;
 using DTOs;
-using Infraestruture.Repositories.Persons;
 
 namespace Host.Controllers;
 
@@ -9,17 +9,17 @@ namespace Host.Controllers;
 [Route("[controller]")]
 public class PersonController : ControllerBase
 {
-    private readonly PersonRepository _personRepository;
+    private readonly IPersonService _service;
 
-    public PersonController(PersonRepository repository)
+    public PersonController(IPersonService service)
     {
-        _personRepository = repository;
+        _service = service;
     }
 
     [HttpPost]
-    public IActionResult AddPerson([FromBody] PersonCreateDTO personDto)
+    public IActionResult AddPerson([FromBody] PersonCreateDto personDto)
     { 
-        var person = _personRepository.CreatePerson(personDto);
+        var person = _service.CreatePerson(personDto);
         return CreatedAtAction(
                 nameof(GetPersonById),
                 new { id = person?.Id },
@@ -28,23 +28,23 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet()]
-    public IEnumerable<PersonReadDTO>? ListPerson([FromQuery()] int page = 0, [FromQuery] int size = 50)
+    public IEnumerable<PersonReadDto>? ListPerson([FromQuery()] int page = 0, [FromQuery] int size = 50)
     { 
-        return _personRepository.GetAll(page, size);
+        return _service.GetAll(page, size);
     }
 
     [HttpGet("{id}")]
     public IActionResult GetPersonById(int id)
     {
-        var person = _personRepository.GetPersonById(id);
+        var person = _service.GetPersonById(id);
         if (person == null) return NotFound();
         return Ok(person);
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdatePerson(int id, [FromBody] PersonUpdateDTO personUpdateDto)
+    public IActionResult UpdatePerson(int id, [FromBody] PersonUpdateDto personUpdateDto)
     {
-        var person = _personRepository.UpdatePerson(id, personUpdateDto);
+        var person = _service.UpdatePerson(id, personUpdateDto);
         if (person == null) return NotFound();
         return NoContent();
     }
@@ -52,7 +52,7 @@ public class PersonController : ControllerBase
     [HttpDelete("{id}")]
     public IActionResult DeletePerson(int id)
     {
-        var person = _personRepository.DeletePerson(id);
+        var person = _service.DeletePerson(id);
         if(person == null) return NotFound();
         return NoContent();
     }

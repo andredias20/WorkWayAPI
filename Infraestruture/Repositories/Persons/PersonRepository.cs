@@ -1,65 +1,46 @@
 ﻿using AutoMapper;
 using DTOs;
-using Infraestruture.Repositories;
-using System.Drawing;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using Infraestruture.Context;
 using Models;
 
 namespace Infraestruture.Repositories.Persons
 {
     public class PersonRepository : IPersonRepository
     {
-        private WorkWayContext _context;
-        private IMapper _mapper;
+        private readonly WorkWayContext _context;
 
-        public PersonRepository(WorkWayContext context, IMapper mapper)
+        public PersonRepository(WorkWayContext context)
         {
-            _mapper = mapper;
             _context = context;
         }
-        public List<PersonReadDTO>? GetAll(int page, int size)
+        
+        public IQueryable<Person>? GetAll(int skip, int size)
         {
-            var skip = page * size;
-            var query = _context.People.Skip(skip).Take(size);
-            return _mapper.Map<List<PersonReadDTO>>(query);
+            return _context.Person.Skip(skip).Take(size);
         }
 
         public Person? GetPersonById(int id)
         {
-            return _context.People.FirstOrDefault(person => person.Id == id);
+            return _context.Person.FirstOrDefault(person => person.Id == id);
         }
 
-        public PersonReadDTO? GetPersonReadDtoById(int id)
+        public Person? CreatePerson(Person person)
         {
-            var person = GetPersonById(id);
-            return _mapper.Map<PersonReadDTO>(person);
-        }
-
-        public Person? CreatePerson(PersonCreateDTO personDto)
-        {
-            var person = _mapper.Map<Person>(personDto);
-            _context.People.Add(person);
+            _context.Person.Add(person);
             _context.SaveChanges();
             return person;
         }
 
-        public Person? UpdatePerson(int id, PersonUpdateDTO personUpdateDTO)
+        public Person? UpdatePerson(Person person)
         {
-            var person = _context.People.FirstOrDefault(person => person.Id == id);
-            _mapper.Map(personUpdateDTO, person);
+            _context.Update(person);
             _context.SaveChanges();
             return person;
         }
 
-        public Person? DeletePerson(int id)
+        public Person? DeletePerson(Person person)
         {
-            var person = GetPersonById(id);
-            if (person == null) return null;
-            _context.People.Remove(person);
+            _context.Person.Remove(person);
             _context.SaveChanges();
             return person;
         }
