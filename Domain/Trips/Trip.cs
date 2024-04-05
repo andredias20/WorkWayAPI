@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Models;
+using Domain.Persons;
+
 
 namespace Domain.Trips;
 

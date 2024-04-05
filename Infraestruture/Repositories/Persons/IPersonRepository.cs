@@ -1,4 +1,4 @@
-﻿using Models;
+﻿using Domain.Persons;
 
 namespace Infraestruture.Repositories.Persons
 {

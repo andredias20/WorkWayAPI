@@ -6,7 +6,11 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<WorkWayContext>(opts => 
-    opts.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+        opts.UseNpgsql(
+            builder.Configuration.GetConnectionString("Default"), optionsBuilder =>
+            {}
+        )
+    );
 
 
 builder.Services

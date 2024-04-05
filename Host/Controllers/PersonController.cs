@@ -6,7 +6,7 @@ namespace Host.Controllers;
 
 [ApiController]
 
-[Route("[controller]")]
+[Route("[controller]")] 
 public class PersonController : ControllerBase
 {
     private readonly IPersonService _service;
@@ -27,8 +27,8 @@ public class PersonController : ControllerBase
         );
     }
 
-    [HttpGet()]
-    public IEnumerable<PersonReadDto>? ListPerson([FromQuery()] int page = 0, [FromQuery] int size = 50)
+    [HttpGet]
+    public IEnumerable<PersonReadDto> ListPerson([FromQuery()] int page = 0, [FromQuery] int size = 50)
     { 
         return _service.GetAll(page, size);
     }

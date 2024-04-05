@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DTOs;
 using Infraestruture.Context;
-using Models;
+using Domain.Persons;
 
 namespace Infraestruture.Repositories.Persons
 {
