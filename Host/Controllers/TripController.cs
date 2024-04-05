@@ -1,5 +1,5 @@
-using Application.Services.Trip;
-using Infraestruture.Repositories.Trips;
+using Application.Services.Trips;
+using Domain.Trips.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Host.Controllers;
@@ -14,5 +14,12 @@ public class TripController : ControllerBase
     {
         _service = service;
     }
+    
+    [HttpGet]
+    public ICollection<TripReadDto> GetAll([FromQuery()] int page = 0, int size = 50)
+    {
+        return  _service.GetAll(page, size);
+    }
+    
 
 }

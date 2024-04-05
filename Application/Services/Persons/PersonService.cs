@@ -1,7 +1,7 @@
 using AutoMapper;
 using DTOs;
 using Infraestruture.Repositories.Persons;
-using Models;
+using Domain.Persons;
 
 namespace Application.Services.Persons;
 
@@ -17,7 +17,7 @@ public class PersonService : IPersonService
         _mapper = mapper;
     }
     
-    public List<PersonReadDto>? GetAll(int page, int size)
+    public List<PersonReadDto> GetAll(int page, int size)
     {
         var query = _repository.GetAll(page, size);
         return _mapper.Map<List<PersonReadDto>>(query);

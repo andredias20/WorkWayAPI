@@ -1,5 +1,5 @@
 using AutoMapper;
-using Models;
+using Domain.Persons;
 using DTOs;
 
 namespace Profiles;
